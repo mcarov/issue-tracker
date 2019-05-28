@@ -1,10 +1,10 @@
 package ru.itpark.issuetrackerbackend.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@NoArgsConstructor
 public class Label {
     private long id;
     private String title;

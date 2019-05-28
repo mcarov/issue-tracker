@@ -1,0 +1,18 @@
+CREATE TABLE IF NOT EXISTS issues(
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  title TEXT,
+  description TEXT,
+  date TIMESTAMP,
+  votes INTEGER DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS labels(
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  title TEXT
+);
+
+CREATE TABLE IF NOT EXISTS issues_labels(
+  issue_id INTEGER,
+  label_id INTEGER,
+  PRIMARY KEY (issue_id, label_id)
+);
