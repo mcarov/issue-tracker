@@ -21,6 +21,13 @@ public class IssueRepository {
                 new BeanPropertyRowMapper<>(Issue.class));
     }
 
+    public List<Issue> searchForIssues(String query) {
+        return template.query("SELECT id, title, description, date, votes FROM issues WHERE " +
+                        "lower(title) LIKE :query OR lower(description) LIKE :query;",
+                Map.of("query", String.join("", "%", query.toLowerCase(), "%")),
+                new BeanPropertyRowMapper<>(Issue.class));
+    }
+
     public Issue getIssueById(long id) {
         return template.queryForObject("SELECT id, title, description, date, votes FROM issues WHERE id = :id;",
                 Map.of("id", id), new BeanPropertyRowMapper<>(Issue.class));
@@ -33,8 +40,10 @@ public class IssueRepository {
                             "description", issue.getDescription(),
                             "date", issue.getDate(),
                             "votes", issue.getVotes()));
+
             Optional<Long> issueId = Optional.ofNullable(template.getJdbcTemplate().queryForObject("SELECT last_insert_rowid();", Long.class));
             issue.setId(issueId.orElseThrow(() -> new EmptyResultDataAccessException(1)));
+
             return;
         }
         template.update("UPDATE issues SET title = :title, description = :description, date = :date, votes = :votes WHERE id = :id;",

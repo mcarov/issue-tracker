@@ -7,9 +7,9 @@ import ru.itpark.issuetrackerbackend.domain.Label;
 import ru.itpark.issuetrackerbackend.repository.IssueLabelIdRepository;
 import ru.itpark.issuetrackerbackend.repository.IssueRepository;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +25,21 @@ public class IssueService {
         return issues;
     }
 
+    public List<Issue> searchForIssues(String query) {
+        List<Issue> issues = issueRepository.searchForIssues(query);
+        issues.forEach(this::addLabelsToIssue);
+
+        List<Long> labelIds = labelService.getLabelIdsForSearch(query);
+        List<Issue> issuesFoundByLabel = labelIds.stream().map(issueLabelIdRepository::getIssueIdsByLabelId).
+                flatMap(Collection::stream).map(issueRepository::getIssueById).collect(Collectors.toList());
+
+        Map<Long, Issue> issueMap = new TreeMap<>();
+        issueMap.putAll(Stream.concat(issues.stream(), issuesFoundByLabel.stream()).
+                collect(Collectors.toMap(Issue::getId, issue -> issue, (ke1, key2) -> ke1)));
+
+        return new ArrayList<>(issueMap.values());
+    }
+
     public Issue getIssueById(long id) {
         Issue issue = issueRepository.getIssueById(id);
         addLabelsToIssue(issue);
@@ -36,8 +51,8 @@ public class IssueService {
         issueRepository.saveIssue(issue);
 
         Arrays.asList(issue.getLabels()).forEach(i -> {
-            issueLabelIdRepository.save(issue.getId(), i.getId());
             labelService.saveLabel(i);
+            issueLabelIdRepository.save(issue.getId(), i.getId());
         });
     }
 

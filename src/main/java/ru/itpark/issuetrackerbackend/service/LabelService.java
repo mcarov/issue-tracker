@@ -12,15 +12,19 @@ import java.util.List;
 public class LabelService {
     private final LabelRepository labelRepository;
 
-    public Label getLabelById(long id) {
+    List<Long> getLabelIdsForSearch(String query) {
+        return labelRepository.getLabelIdsForSearch(query);
+    }
+
+    Label getLabelById(long id) {
         return labelRepository.getLabelById(id);
     }
 
-    public void saveLabel(Label label) {
+    void saveLabel(Label label) {
         labelRepository.saveLabel(label);
     }
 
-    public void removeLabelById(long id) {
+    void removeLabelById(long id) {
         labelRepository.removeLabelById(id);
     }
 }

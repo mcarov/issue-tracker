@@ -19,9 +19,16 @@ public class IssueLabelIdRepository {
         return count.orElse(0L);
     }
 
+    public List<Long> getIssueIdsByLabelId(long id) {
+        return template.query("SELECT issue_id FROM issues_labels WHERE label_id = :id;",
+                Map.of("id", id),
+                (resultSet, i) -> resultSet.getLong(1));
+    }
+
     public List<Long> getLabelIdsByIssueId(long id) {
         return template.query("SELECT label_id FROM issues_labels WHERE issue_id = :id;",
-                Map.of("id", id), ((resultSet, i) -> resultSet.getLong(1)));
+                Map.of("id", id),
+                (resultSet, i) -> resultSet.getLong(1));
     }
 
     public void save(long issueId, long labelId) {

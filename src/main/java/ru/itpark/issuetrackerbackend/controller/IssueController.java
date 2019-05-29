@@ -18,12 +18,17 @@ public class IssueController {
         return issueService.getIssues();
     }
 
+    @GetMapping("api/search/issues")
+    public List<Issue> searchForIssues(@RequestParam String q) {
+        return issueService.searchForIssues(q);
+    }
+
     @GetMapping("/api/issues/{id}")
     public Issue getIssueById(@PathVariable long id) {
         return issueService.getIssueById(id);
     }
 
-    @PostMapping
+    @PostMapping("/api/issues")
     public void saveIssue(@RequestBody Issue issue) {
         issueService.saveIssue(issue);
     }
