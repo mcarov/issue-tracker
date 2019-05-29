@@ -9,18 +9,27 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/issues")
 @RequiredArgsConstructor
 public class IssueController {
     private final IssueService issueService;
 
-    @GetMapping
+    @GetMapping("/api/issues")
     public List<Issue> getIssues() {
         return issueService.getIssues();
+    }
+
+    @GetMapping("/api/issues/{id}")
+    public Issue getIssueById(@PathVariable long id) {
+        return issueService.getIssueById(id);
     }
 
     @PostMapping
     public void saveIssue(@RequestBody Issue issue) {
         issueService.saveIssue(issue);
+    }
+
+    @DeleteMapping("/api/issues/{id}")
+    public void removeIssue(@PathVariable long id) {
+        issueService.removeIssueById(id);
     }
 }

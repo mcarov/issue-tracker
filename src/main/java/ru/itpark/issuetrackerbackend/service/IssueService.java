@@ -20,9 +20,16 @@ public class IssueService {
 
     public List<Issue> getIssues() {
         List<Issue> issues = issueRepository.getIssues();
-        issues.forEach(this::addLabels);
+        issues.forEach(this::addLabelsToIssue);
 
         return issues;
+    }
+
+    public Issue getIssueById(long id) {
+        Issue issue = issueRepository.getIssueById(id);
+        addLabelsToIssue(issue);
+
+        return issue;
     }
 
     public void saveIssue(Issue issue) {
@@ -34,7 +41,18 @@ public class IssueService {
         });
     }
 
-    private void addLabels(Issue issue) {
+    public void removeIssueById(long id) {
+        issueRepository.removeIssueById(id);
+        List<Long> labelIds = issueLabelIdRepository.getLabelIdsByIssueId(id);
+        issueLabelIdRepository.removeLabelIdsByIssueId(id);
+        for(Long labelId : labelIds) {
+            long count = issueLabelIdRepository.countLabelId(labelId);
+            if(count == 0)
+                labelService.removeLabelById(labelId);
+        }
+    }
+
+    private void addLabelsToIssue(Issue issue) {
         List<Long> labelIds = issueLabelIdRepository.getLabelIdsByIssueId(issue.getId());
         Label[] labels = labelIds.stream().map(labelService::getLabelById).collect(Collectors.toList()).toArray(Label[]::new);
         issue.setLabels(labels);

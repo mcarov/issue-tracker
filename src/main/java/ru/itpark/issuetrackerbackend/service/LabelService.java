@@ -19,4 +19,8 @@ public class LabelService {
     public void saveLabel(Label label) {
         labelRepository.saveLabel(label);
     }
+
+    public void removeLabelById(long id) {
+        labelRepository.removeLabelById(id);
+    }
 }

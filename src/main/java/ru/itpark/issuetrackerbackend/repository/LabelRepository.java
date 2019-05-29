@@ -25,4 +25,8 @@ public class LabelRepository {
         }
         template.update("UPDATE labels SET title = :title WHERE id = :id;", Map.of("id", label.getId()));
     }
+
+    public void removeLabelById(long id) {
+        template.update("DELETE FROM labels WHERE id = :id", Map.of("id", id));
+    }
 }
