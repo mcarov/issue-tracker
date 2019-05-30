@@ -32,7 +32,7 @@ public class IssueLabelIdRepository {
     }
 
     public void save(long issueId, long labelId) {
-        template.update("INSERT INTO issues_labels (issue_id, label_id) VALUES (:issueId, :labelId);",
+        template.update("MERGE INTO issues_labels (issue_id, label_id) KEY (issue_id, label_id) VALUES (:issueId, :labelId);",
                 Map.of("issueId", issueId, "labelId", labelId));
     }
 

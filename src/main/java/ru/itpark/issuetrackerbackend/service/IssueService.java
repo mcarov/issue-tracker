@@ -27,7 +27,6 @@ public class IssueService {
 
     public List<Issue> searchForIssues(String query) {
         List<Issue> issues = issueRepository.searchForIssues(query);
-        issues.forEach(this::addLabelsToIssue);
 
         List<Long> labelIds = labelService.getLabelIdsForSearch(query);
         List<Issue> issuesFoundByLabel = labelIds.stream().map(issueLabelIdRepository::getIssueIdsByLabelId).
@@ -36,6 +35,7 @@ public class IssueService {
         Map<Long, Issue> issueMap = new TreeMap<>();
         issueMap.putAll(Stream.concat(issues.stream(), issuesFoundByLabel.stream()).
                 collect(Collectors.toMap(Issue::getId, issue -> issue, (ke1, key2) -> ke1)));
+        issueMap.values().forEach(this::addLabelsToIssue);
 
         return new ArrayList<>(issueMap.values());
     }
