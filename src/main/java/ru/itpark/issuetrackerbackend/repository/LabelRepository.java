@@ -1,15 +1,15 @@
 package ru.itpark.issuetrackerbackend.repository;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.itpark.issuetrackerbackend.domain.Label;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -29,10 +29,12 @@ public class LabelRepository {
 
     public void saveLabel(Label label) {
         if(label.getId() == 0) {
-            template.update("INSERT INTO labels (title) VALUES (:title);", Map.of("title", label.getTitle()));
+            GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 
-            Optional<Long> labelId = Optional.ofNullable(template.getJdbcTemplate().queryForObject("SELECT last_insert_rowid();", Long.class));
-            label.setId(labelId.orElseThrow(() -> new EmptyResultDataAccessException(1)));
+            template.update("INSERT INTO labels (title) VALUES (:title);",
+                    new MapSqlParameterSource("title", label.getTitle()), keyHolder);
+
+            label.setId(keyHolder.getKey().longValue());
 
             return;
         }

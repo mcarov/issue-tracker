@@ -1,15 +1,16 @@
 package ru.itpark.issuetrackerbackend.repository;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.itpark.issuetrackerbackend.domain.Issue;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -35,14 +36,18 @@ public class IssueRepository {
 
     public void saveIssue(Issue issue) {
         if(issue.getId() == 0) {
-            template.update("INSERT INTO issues (title, description, date, votes) VALUES (:id, :description, :date, :votes);",
-                    Map.of("title", issue.getTitle(),
-                            "description", issue.getDescription(),
-                            "date", issue.getDate(),
-                            "votes", issue.getVotes()));
+            SqlParameterSource sqlParameterSource = new MapSqlParameterSource().
+                    addValue("title", issue.getTitle()).
+                    addValue("description", issue.getDescription()).
+                    addValue("date", issue.getDate()).
+                    addValue("votes", issue.getVotes());
 
-            Optional<Long> issueId = Optional.ofNullable(template.getJdbcTemplate().queryForObject("SELECT last_insert_rowid();", Long.class));
-            issue.setId(issueId.orElseThrow(() -> new EmptyResultDataAccessException(1)));
+            GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+
+            template.update("INSERT INTO issues (title, description, date, votes) VALUES (:id, :description, :date, :votes);",
+                    sqlParameterSource, keyHolder);
+
+            issue.setId(keyHolder.getKey().longValue());
 
             return;
         }
