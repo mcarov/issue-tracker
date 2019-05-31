@@ -10,6 +10,7 @@ import ru.itpark.issuetrackerbackend.domain.Label;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Repository
 @RequiredArgsConstructor
@@ -34,7 +35,8 @@ public class LabelRepository {
             template.update("INSERT INTO labels (title) VALUES (:title);",
                     new MapSqlParameterSource("title", label.getTitle()), keyHolder);
 
-            label.setId(keyHolder.getKey().longValue());
+            long labelId = Objects.requireNonNull(keyHolder.getKey()).longValue();
+            label.setId(labelId);
 
             return;
         }

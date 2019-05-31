@@ -11,6 +11,7 @@ import ru.itpark.issuetrackerbackend.domain.Issue;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Repository
 @RequiredArgsConstructor
@@ -47,7 +48,8 @@ public class IssueRepository {
             template.update("INSERT INTO issues (title, description, date, votes) VALUES (:id, :description, :date, :votes);",
                     sqlParameterSource, keyHolder);
 
-            issue.setId(keyHolder.getKey().longValue());
+            long issueId = Objects.requireNonNull(keyHolder.getKey()).longValue();
+            issue.setId(issueId);
 
             return;
         }

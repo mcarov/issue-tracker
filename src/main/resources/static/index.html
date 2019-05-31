@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Issues</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container" id="root">
+        <br>
+        <div class="column">
+            <div class="input-group">
+                <input type="text" class="form-control" id="searchField" placeholder="Search for...">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-success" id="searchButton">Go!</button>
+                </div>
+            </div>
+            <br>
+            <h3 class="text-center">Issues</h3>
+            <table class="table" id="issueTable">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">title</th>
+                        <th scope="col">description</th>
+                        <th scope="col">date</th>
+                        <th scope="col">votes</th>
+                        <th scope="col">labels</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <script src="app.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<FindBugsFilter>
+    <Match>
+        <Class name="ru.itpark.issuetrackerbackend.repository.IssueRepository" />
+        <Method name="saveIssue" />
+        <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE" />
+    </Match>
+    <Match>
+        <Class name="ru.itpark.issuetrackerbackend.repository.LabelRepository" />
+        <Method name="saveLabel" />
+        <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE" />
+    </Match>
+</FindBugsFilter>
