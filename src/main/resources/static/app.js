@@ -2,6 +2,8 @@ const issueTable = document.getElementById("issueTable");
 const searchButton = document.getElementById("searchButton");
 const searchField = document.getElementById("searchField");
 
+const searchUrl = `https://spring-boot-rest-itpark.herokuapp.com/api/search/issues?q=${query}`;
+
 async function getIssues() {
     try {
         const reply = await fetch('https://spring-boot-rest-itpark.herokuapp.com/api/issues');
@@ -16,7 +18,7 @@ async function getIssues() {
 
 async function searchForIssues(query) {
     try {
-        const reply = await fetch(`https://spring-boot-rest-itpark.herokuapp.com/api/search/issues?q=${query}`);
+        const reply = await fetch(searchUrl);
         const data = await reply.json();
         console.log(data);
         if(issueTable.childElementCount === 2) {
@@ -72,9 +74,7 @@ function createTableBody(array) {
     issueTable.appendChild(tbody);
 }
 
-if(issueTable.childElementCount === 1) {
-    getIssues();
-}
+getIssues();
 
 searchButton.addEventListener('click', function () {
     searchForIssues(searchField.value);
