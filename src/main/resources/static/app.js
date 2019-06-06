@@ -2,7 +2,7 @@ const issueTable = document.getElementById("issueTable");
 const searchButton = document.getElementById("searchButton");
 const searchField = document.getElementById("searchField");
 
-const searchUrl = `https://spring-boot-rest-itpark.herokuapp.com/api/search/issues?q=${query}`;
+const searchUrl = 'https://spring-boot-rest-itpark.herokuapp.com/api/search/issues?q=';
 
 async function getIssues() {
     try {
@@ -18,7 +18,7 @@ async function getIssues() {
 
 async function searchForIssues(query) {
     try {
-        const reply = await fetch(searchUrl);
+        const reply = await fetch(searchUrl.concat(query));
         const data = await reply.json();
         console.log(data);
         if(issueTable.childElementCount === 2) {
